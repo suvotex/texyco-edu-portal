@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -20,95 +21,136 @@
     <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col justify-between transition-colors duration-300">
 
-    <!-- Modern Glassmorphism Navbar -->
-    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
+    <!-- Header / Navbar with 3-Dot Popup Menu -->
+    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative">
+            
+            <!-- Logo & Name -->
+            <div class="flex items-center space-x-3">
                 <span class="bg-brand-600 text-white p-2 rounded-xl font-black text-xl shadow-md">📚</span>
-                <h1 class="text-2xl font-black bg-gradient-to-r from-brand-700 to-indigo-600 bg-clip-text text-transparent">Texyco EduPortal</h1>
+                <h1 class="text-xl md:text-2xl font-black bg-gradient-to-r from-brand-700 to-indigo-600 bg-clip-text text-transparent">Texyco EduPortal</h1>
             </div>
-            <nav class="space-x-6 hidden md:flex font-medium text-slate-600">
+
+            <!-- Menu List -->
+            <nav class="space-x-6 hidden md:flex font-medium text-slate-600 dark:text-slate-300">
                 <a href="#home" class="hover:text-brand-600 transition">Home</a>
                 <a href="#materials" class="hover:text-brand-600 transition">Free Books</a>
                 <a href="#tests" class="hover:text-brand-600 transition">Mock Tests</a>
                 <a href="#updates" class="hover:text-brand-600 transition">Job Notices</a>
             </nav>
-            <div>
-                <button onclick="openModal()" class="bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 hover:bg-brand-700 hover:shadow-xl transition-all duration-200">Login / Signup</button>
+
+            <!-- Right Actions: Login Button & 3-Dot Icon Menu -->
+            <div class="flex items-center space-x-3">
+                <button onclick="openModal()" class="hidden sm:inline-block bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 hover:bg-brand-700 transition-all">Login / Signup</button>
+
+                <!-- 3-Dot Icon Button -->
+                <div class="relative">
+                    <button onclick="toggleThreeDotMenu()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- 3-Dot Popup Dropdown -->
+                    <div id="threeDotPopup" class="hidden absolute right-0 mt-3 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in duration-150">
+                        
+                        <!-- Account Section (Dynamic based on login status) -->
+                        <div id="popupAccountSection" class="pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
+                            <p class="text-xs text-slate-400 font-bold uppercase mb-2">Account</p>
+                            <div id="loggedOutOptions">
+                                <button onclick="openModal(); toggleThreeDotMenu();" class="w-full text-left px-3 py-2 rounded-xl text-sm font-semibold bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 transition">🔑 Sign In / Login</button>
+                            </div>
+                            <div id="loggedInOptions" class="hidden space-y-1">
+                                <p id="userEmailDisplay" class="text-xs font-bold text-slate-600 dark:text-slate-300 truncate px-2 mb-1"></p>
+                                <a href="#profile" class="block px-3 py-2 rounded-xl text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">👤 My Profile</a>
+                                <a href="#saved" class="block px-3 py-2 rounded-xl text-sm hover:bg-slate-100 dark:hover:bg-slate-800 transition">📚 Saved Materials</a>
+                                <button onclick="handleLogout()" class="w-full text-left px-3 py-2 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition">🚪 Logout</button>
+                            </div>
+                        </div>
+
+                        <!-- Light/Dark Mode Toggle Option -->
+                        <div class="pt-1">
+                            <p class="text-xs text-slate-400 font-bold uppercase mb-2">Appearance</p>
+                            <button onclick="toggleDarkMode()" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                                <span id="themeText">🌙 Dark Mode</span>
+                                <span class="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-md">Toggle</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </header>
 
-    <!-- Hero Section with Advanced Layout -->
+    <!-- Main Content Body -->
     <main class="flex-grow">
+        <!-- Hero Section -->
         <section id="home" class="max-w-7xl mx-auto px-6 py-20 text-center relative overflow-hidden">
-            <div class="absolute inset-0 -z-10 flex justify-center items-center opacity-10">
-                <div class="w-96 h-96 bg-brand-500 rounded-full blur-3xl"></div>
-            </div>
-            <span class="inline-block bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full mb-6 border border-brand-200">🚀 100% Free Learning & Practice Platform</span>
-            <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">Prepare for All-India & <br><span class="bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent">West Bengal Exams</span> for Free</h2>
-            <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">Access unlimited high-quality notes, custom study schedules, timed mock tests, and daily mentor updates in Bengali & English.</p>
+            <span class="inline-block bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full mb-6 border border-brand-200 dark:border-brand-800">🚀 100% Free Learning & Practice Platform</span>
+            <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight">Prepare for All-India & <br><span class="bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent">West Bengal Exams</span> for Free</h2>
+            <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">Access unlimited high-quality notes, custom study schedules, timed mock tests, and daily mentor updates in Bengali & English.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#materials" class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-brand-500/20 hover:bg-brand-700 hover:scale-[1.02] transition-all">Explore Free Books</a>
-                <a href="#tests" class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-2xl font-bold shadow-sm hover:bg-slate-50 transition-all">Take Mock Test</a>
+                <a href="#materials" class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-brand-500/20 hover:bg-brand-700 transition">Explore Free Books</a>
+                <a href="#tests" class="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 px-8 py-4 rounded-2xl font-bold shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition">Take Mock Test</a>
             </div>
         </section>
 
-        <!-- Free Study Materials Section (Card Grid) -->
+        <!-- Free Study Materials Section -->
         <section id="materials" class="max-w-7xl mx-auto px-6 py-16">
             <div class="text-center mb-12">
-                <h3 class="text-3xl font-black text-slate-900 mb-3">📖 Free Study Materials & PDFs</h3>
+                <h3 class="text-3xl font-black mb-3">📖 Free Study Materials & PDFs</h3>
                 <p class="text-slate-500">Handcrafted revision modules for WBCS, UPSC, and State Exams.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
-                    <span class="text-xs bg-blue-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">WBCS / UPSC</span>
-                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-brand-600 transition">Indian Polity Foundation Notes</h4>
-                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Comprehensive notes covering Articles, Amendments, and Judiciary systems in simple language.</p>
-                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-brand-600 py-3 rounded-xl font-bold hover:bg-brand-600 hover:text-white transition-all">Download PDF (Free)</button>
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 hover:border-brand-500 transition-all">
+                    <span class="text-xs bg-blue-50 dark:bg-blue-950 text-brand-600 px-3 py-1 rounded-full font-bold uppercase">WBCS / UPSC</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3">Indian Polity Foundation Notes</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6">Comprehensive notes covering Articles, Amendments, and Judiciary systems in simple language.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 py-3 rounded-xl font-bold hover:bg-brand-600 hover:text-white transition">Download PDF (Free)</button>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
-                    <span class="text-xs bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Aptitude</span>
-                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-emerald-600 transition">Advanced Arithmetic & Shortcuts</h4>
-                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Percentage, Profit & Loss, Ratio shortcuts with solved practice sets for competitive exams.</p>
-                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-emerald-600 py-3 rounded-xl font-bold hover:bg-emerald-600 hover:text-white transition-all">Download PDF (Free)</button>
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 hover:border-emerald-500 transition-all">
+                    <span class="text-xs bg-emerald-50 dark:bg-emerald-950 text-emerald-600 px-3 py-1 rounded-full font-bold uppercase">Aptitude</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3">Advanced Arithmetic & Shortcuts</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6">Percentage, Profit & Loss, Ratio shortcuts with solved practice sets for competitive exams.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 py-3 rounded-xl font-bold hover:bg-emerald-600 hover:text-white transition">Download PDF (Free)</button>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
-                    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">West Bengal GK</span>
-                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-purple-600 transition">WB Geography & History Capsule</h4>
-                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Essential district-wise facts, river systems, and historical movements for WB exams.</p>
-                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-purple-600 py-3 rounded-xl font-bold hover:bg-purple-600 hover:text-white transition-all">Download PDF (Free)</button>
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 hover:border-purple-500 transition-all">
+                    <span class="text-xs bg-purple-50 dark:bg-purple-950 text-purple-600 px-3 py-1 rounded-full font-bold uppercase">West Bengal GK</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3">WB Geography & History Capsule</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6">Essential district-wise facts, river systems, and historical movements for WB exams.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 dark:bg-slate-800 text-purple-600 dark:text-purple-400 py-3 rounded-xl font-bold hover:bg-purple-600 hover:text-white transition">Download PDF (Free)</button>
                 </div>
             </div>
         </section>
 
         <!-- Mock Test Section -->
         <section id="tests" class="max-w-4xl mx-auto px-6 py-16 my-8">
-            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl shadow-brand-500/10 border border-slate-100">
+            <div class="bg-white dark:bg-slate-900 p-8 md:p-12 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800">
                 <div class="text-center mb-8">
-                    <span class="text-xs bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Live Quiz</span>
-                    <h3 class="text-2xl md:text-3xl font-black text-slate-900 mt-2 mb-2">Interactive Practice Mock Test</h3>
+                    <span class="text-xs bg-brand-50 dark:bg-brand-950 text-brand-600 px-3 py-1 rounded-full font-bold uppercase">Live Quiz</span>
+                    <h3 class="text-2xl md:text-3xl font-black mt-2 mb-2">Interactive Practice Mock Test</h3>
                     <p class="text-slate-500 text-sm">Test your preparation with our quick sample quiz.</p>
                 </div>
                 
-                <div id="quizContainer" class="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200/60">
-                    <h4 id="questionTitle" class="text-lg font-bold text-slate-800 mb-6">Q1. What is the capital of West Bengal?</h4>
+                <div class="bg-slate-50 dark:bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800">
+                    <h4 class="text-lg font-bold mb-6">Q1. What is the capital of West Bengal?</h4>
                     <div class="space-y-3 mb-8">
-                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="A" class="mr-3 w-4 h-4 text-brand-600"> A) Howrah</label>
-                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="B" class="mr-3 w-4 h-4 text-brand-600"> B) Kolkata</label>
-                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="C" class="mr-3 w-4 h-4 text-brand-600"> C) Durgapur</label>
-                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="D" class="mr-3 w-4 h-4 text-brand-600"> D) Siliguri</label>
+                        <label class="flex items-center p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:border-brand-500 transition"><input type="radio" name="quiz" value="A" class="mr-3 w-4 h-4 text-brand-600"> A) Howrah</label>
+                        <label class="flex items-center p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:border-brand-500 transition"><input type="radio" name="quiz" value="B" class="mr-3 w-4 h-4 text-brand-600"> B) Kolkata</label>
+                        <label class="flex items-center p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:border-brand-500 transition"><input type="radio" name="quiz" value="C" class="mr-3 w-4 h-4 text-brand-600"> C) Durgapur</label>
+                        <label class="flex items-center p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl cursor-pointer hover:border-brand-500 transition"><input type="radio" name="quiz" value="D" class="mr-3 w-4 h-4 text-brand-600"> D) Siliguri</label>
                     </div>
-                    <button onclick="submitQuiz()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all">Submit Answer</button>
+                    <button onclick="submitQuiz()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition">Submit Answer</button>
                     <p id="quizResult" class="text-center font-bold mt-4 text-lg"></p>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Modern Footer -->
+    <!-- Footer -->
     <footer class="bg-slate-900 text-white py-12 text-center border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-xl font-bold mb-2">📚 Texyco EduPortal</h2>
@@ -119,16 +161,16 @@
 
     <!-- Login Modal -->
     <div id="authModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-        <div class="bg-white p-8 rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in duration-200">
-            <h3 class="text-2xl font-black mb-2 text-slate-900">Student Portal Access</h3>
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl w-full max-w-md shadow-2xl relative">
+            <h3 class="text-2xl font-black mb-2">Student Portal Access</h3>
             <p class="text-slate-500 text-sm mb-6">Sign in or create your free account to track progress.</p>
-            <input type="email" id="authEmail" placeholder="Enter Email Address" class="w-full border border-slate-200 p-3.5 mb-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
-            <input type="password" id="authPassword" placeholder="Enter Password" class="w-full border border-slate-200 p-3.5 mb-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <input type="email" id="authEmail" placeholder="Enter Email Address" class="w-full border dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-3.5 mb-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <input type="password" id="authPassword" placeholder="Enter Password" class="w-full border dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-3.5 mb-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
             <div class="flex gap-3">
-                <button onclick="loginUser()" class="bg-brand-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-brand-700 transition shadow-lg shadow-brand-500/20">Login</button>
-                <button onclick="signupUser()" class="bg-emerald-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">Signup</button>
+                <button onclick="loginUser()" class="bg-brand-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-brand-700 transition">Login</button>
+                <button onclick="signupUser()" class="bg-emerald-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-emerald-700 transition">Signup</button>
             </div>
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full bg-slate-100">×</button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">×</button>
         </div>
     </div>
 
@@ -136,8 +178,46 @@
     <script src="backend-config/supabase.js"></script>
     <script src="assets/js/app.js"></script>
     <script>
+        // Toggle 3-Dot Popup Menu
+        function toggleThreeDotMenu() {
+            const popup = document.getElementById('threeDotPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        // Close popup when clicking outside
+        window.addEventListener('click', function(e) {
+            const btn = document.querySelector('button[onclick="toggleThreeDotMenu()"]');
+            const popup = document.getElementById('threeDotPopup');
+            if (!popup.contains(e.target) && !btn.contains(e.target)) {
+                popup.classList.add('hidden');
+            }
+        });
+
+        // Dark / Light Mode Toggle Logic
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const themeText = document.getElementById('themeText');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                themeText.textContent = "🌙 Dark Mode";
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                themeText.textContent = "☀️ Light Mode";
+            }
+        }
+
+        // Check saved theme on load
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('themeText').textContent = "☀️ Light Mode";
+        }
+
+        // Modal Controls
         function openModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('authModal').classList.add('hidden'); }
+        
         function loginUser() {
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
