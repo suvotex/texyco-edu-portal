@@ -1,103 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Texyco Edu Portal - All-India & WB Exam Preparation</title>
+    <title>Texyco EduPortal - Professional Competitive Exam Preparation</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eff6ff', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' }
+                    }
+                }
+            }
+        }
+    </script>
     <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans">
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- Header / Navbar -->
-    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wide">📚 Texyco EduPortal</h1>
-            <nav class="space-x-4 hidden md:flex">
-                <a href="#home" class="hover:text-blue-200">Home</a>
-                <a href="#materials" class="hover:text-blue-200">Free Books</a>
-                <a href="#tests" class="hover:text-blue-200">Mock Tests</a>
-                <a href="#updates" class="hover:text-blue-200">Job Notices</a>
+    <!-- Modern Glassmorphism Navbar -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="bg-brand-600 text-white p-2 rounded-xl font-black text-xl shadow-md">📚</span>
+                <h1 class="text-2xl font-black bg-gradient-to-r from-brand-700 to-indigo-600 bg-clip-text text-transparent">Texyco EduPortal</h1>
+            </div>
+            <nav class="space-x-6 hidden md:flex font-medium text-slate-600">
+                <a href="#home" class="hover:text-brand-600 transition">Home</a>
+                <a href="#materials" class="hover:text-brand-600 transition">Free Books</a>
+                <a href="#tests" class="hover:text-brand-600 transition">Mock Tests</a>
+                <a href="#updates" class="hover:text-brand-600 transition">Job Notices</a>
             </nav>
             <div>
-                <button onclick="openModal()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">Login / Signup</button>
+                <button onclick="openModal()" class="bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-brand-500/30 hover:bg-brand-700 hover:shadow-xl transition-all duration-200">Login / Signup</button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="max-w-7xl mx-auto px-4 py-12 text-center">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Prepare for All-India & West Bengal Exams for Free</h2>
-        <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-8">Access unlimited free books, custom study schedules, timed mock tests, and daily mentor updates in Bengali & English.</p>
-        <div class="space-x-4">
-            <a href="#materials" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-blue-700 transition">Explore Free Books</a>
-            <a href="#tests" class="bg-slate-200 text-slate-800 px-6 py-3 rounded-xl font-semibold hover:bg-slate-300 transition">Take Mock Test</a>
-        </div>
-    </section>
+    <!-- Hero Section with Advanced Layout -->
+    <main class="flex-grow">
+        <section id="home" class="max-w-7xl mx-auto px-6 py-20 text-center relative overflow-hidden">
+            <div class="absolute inset-0 -z-10 flex justify-center items-center opacity-10">
+                <div class="w-96 h-96 bg-brand-500 rounded-full blur-3xl"></div>
+            </div>
+            <span class="inline-block bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full mb-6 border border-brand-200">🚀 100% Free Learning & Practice Platform</span>
+            <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">Prepare for All-India & <br><span class="bg-gradient-to-r from-brand-600 to-indigo-600 bg-clip-text text-transparent">West Bengal Exams</span> for Free</h2>
+            <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">Access unlimited high-quality notes, custom study schedules, timed mock tests, and daily mentor updates in Bengali & English.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#materials" class="bg-brand-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-brand-500/20 hover:bg-brand-700 hover:scale-[1.02] transition-all">Explore Free Books</a>
+                <a href="#tests" class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-2xl font-bold shadow-sm hover:bg-slate-50 transition-all">Take Mock Test</a>
+            </div>
+        </section>
 
-    <!-- Free Study Materials Section -->
-    <section id="materials" class="max-w-7xl mx-auto px-4 py-12">
-        <h3 class="text-3xl font-bold text-slate-900 mb-6 text-center">📖 Free Study Materials & PDFs</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-xl shadow border border-slate-100">
-                <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-semibold">WBCS / UPSC</span>
-                <h4 class="text-xl font-bold mt-3 mb-2">Indian Polity Foundation Notes</h4>
-                <p class="text-slate-600 text-sm mb-4">Comprehensive notes covering Articles, Amendments, and Judiciary systems in simple language.</p>
-                <button onclick="alert('Downloading PDF...')" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Download PDF (Free)</button>
+        <!-- Free Study Materials Section (Card Grid) -->
+        <section id="materials" class="max-w-7xl mx-auto px-6 py-16">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-black text-slate-900 mb-3">📖 Free Study Materials & PDFs</h3>
+                <p class="text-slate-500">Handcrafted revision modules for WBCS, UPSC, and State Exams.</p>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow border border-slate-100">
-                <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold">Quantitative Aptitude</span>
-                <h4 class="text-xl font-bold mt-3 mb-2">Advanced Arithmetic & Shortcuts</h4>
-                <p class="text-slate-600 text-sm mb-4">Percentage, Profit & Loss, Ratio shortcuts with solved practice sets for competitive exams.</p>
-                <button onclick="alert('Downloading PDF...')" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Download PDF (Free)</button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
+                    <span class="text-xs bg-blue-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">WBCS / UPSC</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-brand-600 transition">Indian Polity Foundation Notes</h4>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Comprehensive notes covering Articles, Amendments, and Judiciary systems in simple language.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-brand-600 py-3 rounded-xl font-bold hover:bg-brand-600 hover:text-white transition-all">Download PDF (Free)</button>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
+                    <span class="text-xs bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Aptitude</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-emerald-600 transition">Advanced Arithmetic & Shortcuts</h4>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Percentage, Profit & Loss, Ratio shortcuts with solved practice sets for competitive exams.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-emerald-600 py-3 rounded-xl font-bold hover:bg-emerald-600 hover:text-white transition-all">Download PDF (Free)</button>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl transition-all group">
+                    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">West Bengal GK</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-slate-900 group-hover:text-purple-600 transition">WB Geography & History Capsule</h4>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">Essential district-wise facts, river systems, and historical movements for WB exams.</p>
+                    <button onclick="alert('Downloading PDF...')" class="w-full bg-slate-100 text-purple-600 py-3 rounded-xl font-bold hover:bg-purple-600 hover:text-white transition-all">Download PDF (Free)</button>
+                </div>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow border border-slate-100">
-                <span class="text-xs bg-purple-100 text-purple-800 px-2.5 py-1 rounded-full font-semibold">West Bengal GK</span>
-                <h4 class="text-xl font-bold mt-3 mb-2">WB Geography & History Capsule</h4>
-                <p class="text-slate-600 text-sm mb-4">Essential district-wise facts, river systems, and historical movements for WB exams.</p>
-                <button onclick="alert('Downloading PDF...')" class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Download PDF (Free)</button>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Mock Test Section -->
-    <section id="tests" class="max-w-7xl mx-auto px-4 py-12 bg-slate-100 rounded-2xl my-8">
-        <h3 class="text-3xl font-bold text-slate-900 mb-4 text-center">📝 Interactive Practice Mock Test</h3>
-        <p class="text-center text-slate-600 mb-8">Test your preparation with our quick sample quiz.</p>
-        
-        <div id="quizContainer" class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow">
-            <h4 id="questionTitle" class="text-lg font-bold text-slate-800 mb-4">Q1. What is the capital of West Bengal?</h4>
-            <div class="space-y-3 mb-6">
-                <label class="block p-3 border rounded-lg cursor-pointer hover:bg-blue-50"><input type="radio" name="quiz" value="A" class="mr-2"> A) Howrah</label>
-                <label class="block p-3 border rounded-lg cursor-pointer hover:bg-blue-50"><input type="radio" name="quiz" value="B" class="mr-2"> B) Kolkata</label>
-                <label class="block p-3 border rounded-lg cursor-pointer hover:bg-blue-50"><input type="radio" name="quiz" value="C" class="mr-2"> C) Durgapur</label>
-                <label class="block p-3 border rounded-lg cursor-pointer hover:bg-blue-50"><input type="radio" name="quiz" value="D" class="mr-2"> D) Siliguri</label>
+        <!-- Mock Test Section -->
+        <section id="tests" class="max-w-4xl mx-auto px-6 py-16 my-8">
+            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl shadow-brand-500/10 border border-slate-100">
+                <div class="text-center mb-8">
+                    <span class="text-xs bg-brand-50 text-brand-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider">Live Quiz</span>
+                    <h3 class="text-2xl md:text-3xl font-black text-slate-900 mt-2 mb-2">Interactive Practice Mock Test</h3>
+                    <p class="text-slate-500 text-sm">Test your preparation with our quick sample quiz.</p>
+                </div>
+                
+                <div id="quizContainer" class="bg-slate-50 p-6 md:p-8 rounded-2xl border border-slate-200/60">
+                    <h4 id="questionTitle" class="text-lg font-bold text-slate-800 mb-6">Q1. What is the capital of West Bengal?</h4>
+                    <div class="space-y-3 mb-8">
+                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="A" class="mr-3 w-4 h-4 text-brand-600"> A) Howrah</label>
+                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="B" class="mr-3 w-4 h-4 text-brand-600"> B) Kolkata</label>
+                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="C" class="mr-3 w-4 h-4 text-brand-600"> C) Durgapur</label>
+                        <label class="flex items-center p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-brand-50/50 transition"><input type="radio" name="quiz" value="D" class="mr-3 w-4 h-4 text-brand-600"> D) Siliguri</label>
+                    </div>
+                    <button onclick="submitQuiz()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all">Submit Answer</button>
+                    <p id="quizResult" class="text-center font-bold mt-4 text-lg"></p>
+                </div>
             </div>
-            <button onclick="submitQuiz()" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition">Submit Answer</button>
-            <p id="quizResult" class="text-center font-bold mt-4"></p>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Simple Login Modal -->
-    <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white p-6 rounded-xl w-96 shadow-lg relative">
-            <h3 class="text-xl font-bold mb-4 text-slate-800">Student Portal Access</h3>
-            <input type="email" id="authEmail" placeholder="Enter Email" class="w-full border p-2 mb-3 rounded-lg">
-            <input type="password" id="authPassword" placeholder="Enter Password" class="w-full border p-2 mb-4 rounded-lg">
-            <div class="flex justify-between space-x-2">
-                <button onclick="loginUser()" class="bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-700">Login</button>
-                <button onclick="signupUser()" class="bg-emerald-600 text-white px-4 py-2 rounded-lg w-full hover:bg-emerald-700">Signup</button>
+    <!-- Modern Footer -->
+    <footer class="bg-slate-900 text-white py-12 text-center border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-xl font-bold mb-2">📚 Texyco EduPortal</h2>
+            <p class="text-slate-400 text-sm mb-6">Empowering aspirants across West Bengal and India with 100% Free resources.</p>
+            <p class="text-slate-500 text-xs">&copy; 2026 Texyco EduPortal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="authModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div class="bg-white p-8 rounded-3xl w-full max-w-md shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <h3 class="text-2xl font-black mb-2 text-slate-900">Student Portal Access</h3>
+            <p class="text-slate-500 text-sm mb-6">Sign in or create your free account to track progress.</p>
+            <input type="email" id="authEmail" placeholder="Enter Email Address" class="w-full border border-slate-200 p-3.5 mb-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <input type="password" id="authPassword" placeholder="Enter Password" class="w-full border border-slate-200 p-3.5 mb-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <div class="flex gap-3">
+                <button onclick="loginUser()" class="bg-brand-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-brand-700 transition shadow-lg shadow-brand-500/20">Login</button>
+                <button onclick="signupUser()" class="bg-emerald-600 text-white px-4 py-3.5 rounded-xl font-bold w-full hover:bg-emerald-700 transition shadow-lg shadow-emerald-600/20">Signup</button>
             </div>
-            <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 font-bold text-lg">×</button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 font-bold text-xl w-8 h-8 flex items-center justify-center rounded-full bg-slate-100">×</button>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-8 text-center mt-12">
-        <p class="text-slate-400">&copy; 2026 Texyco EduPortal. Built for Aspirants with 100% Free Access.</p>
-    </footer>
 
     <!-- Script Links -->
     <script src="backend-config/supabase.js"></script>
@@ -124,10 +157,10 @@
             }
             if (selected.value === 'B') {
                 resultEl.textContent = "✅ Correct Answer! Great job.";
-                resultEl.className = "text-center font-bold mt-4 text-emerald-600";
+                resultEl.className = "text-center font-bold mt-4 text-emerald-600 text-lg";
             } else {
                 resultEl.textContent = "❌ Incorrect. The correct answer is B) Kolkata.";
-                resultEl.className = "text-center font-bold mt-4 text-red-600";
+                resultEl.className = "text-center font-bold mt-4 text-red-600 text-lg";
             }
         }
     </script>
